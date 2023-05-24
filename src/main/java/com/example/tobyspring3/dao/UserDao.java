@@ -7,24 +7,25 @@ import java.util.Map;
 
 import static java.lang.System.getenv;
 
-public class UserDao {
+public abstract class UserDao {
     Connection conn = null;
     PreparedStatement pstmt = null;
-    public Connection getConnection() throws SQLException, ClassNotFoundException {
-        Map<String, String> env = getenv();
-        String dbHost = env.get("DB_HOST");
-        String dbUser = env.get("DB_USER");
-        String dbPassword = env.get("DB_PASSWORD");
-
-
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection(
-                dbHost,
-                dbUser,
-                dbPassword);
-
-        return conn;
-    }
+    public abstract Connection getConnection() throws SQLException, ClassNotFoundException;
+//    {
+//        Map<String, String> env = getenv();
+//        String dbHost = env.get("DB_HOST");
+//        String dbUser = env.get("DB_USER");
+//        String dbPassword = env.get("DB_PASSWORD");
+//
+//
+//        Class.forName("com.mysql.cj.jdbc.Driver");
+//        conn = DriverManager.getConnection(
+//                dbHost,
+//                dbUser,
+//                dbPassword);
+//
+//        return conn;
+//    }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
         conn = getConnection();
@@ -60,14 +61,14 @@ public class UserDao {
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao userDao = new UserDao();
+        UserDao userDao = new NUserDao();
         User user = new User();
-        user.setId("1");
-        user.setName("lion");
-        user.setPassword("123456");
+        user.setId("2");
+        user.setName("dog");
+        user.setPassword("987654");
         userDao.add(user);
 
-        User selectedUser = userDao.get("1");
+        User selectedUser = userDao.get("2");
         System.out.println(selectedUser.getId());
         System.out.println(selectedUser.getName());
         System.out.println(selectedUser.getPassword());
